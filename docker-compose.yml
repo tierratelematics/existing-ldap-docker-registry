@@ -1,0 +1,21 @@
+nginx:
+  image: h3nrik/registry-ldap-auth
+  ports:
+    - "443:443"
+  links:
+    - registry:docker-registry
+  volumes:
+    - $PWD/certs:/etc/ssl/docker:ro
+    - $PWD/conf:/etc/nginx:ro
+  restart: always
+
+registry:
+  image: registry:2.3.1
+  hostname: "docker-registry"
+  environment:
+    - REGISTRY_DELETE_ENABLED=true
+  volumes:
+    - /docker_registry:/var/lib/registry
+  ports:
+    - "5000"
+  restart: always
